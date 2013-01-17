@@ -12,3 +12,5 @@ features
 * fast text-transfers!
 * colors!
 * comic sans!
+
+[in action](http://dev.drailing.net/instatxt/)
