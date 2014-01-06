@@ -13,4 +13,4 @@ features
 * colors!
 * comic sans!
 
-[in action](http://dev.drailing.net/instatxt/)
+[in action](http://instatxt.drailing.net/)
