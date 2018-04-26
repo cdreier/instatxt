@@ -12,4 +12,4 @@ RUN npm install
 EXPOSE 1337
 EXPOSE 80
 
-CMD [ "./startAll.sh" ]
+CMD [ "sh", "startAll.sh" ]
