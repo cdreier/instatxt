@@ -10,6 +10,6 @@ ADD package-lock.json /app
 RUN npm install
 
 EXPOSE 1337
-EXPOSE 80
+EXPOSE 8080
 
 CMD [ "sh", "startAll.sh" ]
