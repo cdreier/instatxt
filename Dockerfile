@@ -1,15 +1,12 @@
-FROM node:9-alpine
+FROM alpine
+
+ARG BIN_ARG=main-master-alpine
+ENV BIN=$BIN_ARG
 
 RUN mkdir /app
+ADD $BIN /app
 WORKDIR /app
-ADD server /app
-ADD startAll.sh /app
-ADD realtimeTxt.js /app
-ADD package.json /app
-ADD package-lock.json /app
-RUN npm install
 
-EXPOSE 1337
 EXPOSE 8080
 
-CMD [ "sh", "startAll.sh" ]
+CMD [ "sh", "-c", "./${BIN}" ]
