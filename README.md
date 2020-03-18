@@ -1,7 +1,7 @@
 instaTxt
 ========
 
-small nodejs app for fast text-transfer from browser to browser.
+small app for fast text-transfer from browser to browser.
 hex colors are the defaults, and text only transfers from color to color.
 
 in case you dont like colors, you can use every string.
