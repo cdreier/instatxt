@@ -24,7 +24,7 @@ var upgrader = websocket.Upgrader{
 
 type socketMsg struct {
 	Type string `json:"type,omitempty"`
-	Data string `json:"data,omitempty"`
+	Data string `json:"data"`
 }
 
 func (s *socket) handler(w http.ResponseWriter, r *http.Request) {

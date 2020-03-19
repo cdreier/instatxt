@@ -34,6 +34,13 @@
 		}))
 	})
 
+	hashInput.addEventListener("keypress", e => {
+		if(e.keyCode == 13 && isValidColor(hashInput.value)){
+			setHash()
+			location.reload()
+		}
+	});
+
 
 	function setHash(){
 		location.hash = hashInput.value
