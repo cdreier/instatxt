@@ -14,7 +14,17 @@
 
 	socket.onmessage = e => {
 		const msg = JSON.parse(e.data)
-		textInput.value = msg.data
+		switch(msg.type){
+			case "change":
+				textInput.value = msg.data
+				break
+			case "sync":
+				socket.send(JSON.stringify({
+					type: "change",
+					data: textInput.value,
+				}))
+				break
+		}
 	}
 
 	textInput.addEventListener("keyup", e => {

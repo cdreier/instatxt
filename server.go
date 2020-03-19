@@ -29,6 +29,11 @@ type socketMsg struct {
 
 func (s *socket) handler(w http.ResponseWriter, r *http.Request) {
 	connection, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("could not start websocket:", err)
+		return
+	}
+	defer connection.Close()
 
 	room := r.URL.Query().Get("room")
 	if room == "" {
@@ -37,12 +42,12 @@ func (s *socket) handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.rooms[room] = append(s.rooms[room], connection)
-
-	if err != nil {
-		log.Print("could not start websocket:", err)
-		return
+	// ask someone for current text, if someone already there
+	if len(s.rooms[room]) > 1 {
+		s.rooms[room][0].WriteJSON(socketMsg{
+			Type: "sync",
+		})
 	}
-	defer connection.Close()
 
 	for {
 		_, message, err := connection.ReadMessage()
