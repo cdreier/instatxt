@@ -9,6 +9,7 @@ import (
 
 	"github.com/cdreier/golang-snippets/snippets"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/websocket"
 	"github.com/markbates/pkger"
 )
@@ -100,6 +101,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	r := chi.NewRouter()
+
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.Logger)
 
 	assestDir := pkger.Dir("/assets")
 	snippets.ChiFileServer(r, "/assets", assestDir)
