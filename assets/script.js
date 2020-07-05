@@ -1,7 +1,10 @@
 (() => {
 
+	const dmp = new diff_match_patch()
 	const textInput = document.getElementById("txt")
 	const hashInput = document.getElementById("hash")
+	const stateLabel = document.getElementById("state")
+	var text = ""
 
 	hashInput.value = getRandomHexColor()
 	checkHash()
@@ -16,22 +19,34 @@
 		const msg = JSON.parse(e.data)
 		switch(msg.type){
 			case "change":
-				textInput.value = msg.data
+				var patches = dmp.patch_fromText(msg.data)
+				var results = dmp.patch_apply(patches, textInput.value)
+				textInput.value = results[0]
+				text = results[0]
+				results = results[1]
+				var ok = results.filter(ok => ok).length
+				var failed = results.filter(ok => !ok).length
+				console.log(`${ok} OK, ${failed} failed`)
 				break
 			case "sync":
 				socket.send(JSON.stringify({
 					type: "change",
-					data: textInput.value,
+					data: getPatchText("", textInput.value),
 				}))
 				break
 		}
 	}
 
 	textInput.addEventListener("keyup", e => {
+		var patch_text = getPatchText(text, e.target.value)
+		if (patch_text == "") {
+			return
+		}
 		socket.send(JSON.stringify({
 			type: "change",
-			data: e.target.value,
+			data: patch_text,
 		}))
+		text = e.target.value
 	})
 
 	hashInput.addEventListener("keypress", e => {
@@ -41,6 +56,15 @@
 		}
 	});
 
+
+	function getPatchText(text1, text2) {
+		var diff = dmp.diff_main(text1, text2, true)
+		if (diff.length > 2) {
+			dmp.diff_cleanupSemantic(diff)
+		}
+		var patch_list = dmp.patch_make(text1, text2, diff)
+		return dmp.patch_toText(patch_list)
+	}
 
 	function setHash(){
 		location.hash = hashInput.value
