@@ -5,6 +5,10 @@
 	const hashInput = document.getElementById("hash")
 	const stateLabel = document.getElementById("state")
 	var text = ""
+	var cursorPos = {
+		start: 0,
+		end: 0,
+	}
 
 	hashInput.value = getRandomHexColor()
 	checkHash()
@@ -22,6 +26,7 @@
 				var patches = dmp.patch_fromText(msg.data)
 				var results = dmp.patch_apply(patches, textInput.value)
 				textInput.value = results[0]
+				textInput.setSelectionRange(cursorPos.start, cursorPos.end)
 				text = results[0]
 				results = results[1]
 				var ok = results.filter(ok => ok).length
@@ -47,6 +52,10 @@
 			data: patch_text,
 		}))
 		text = e.target.value
+
+		cursorPos.start = e.target.selectionStart
+		cursorPos.end = e.target.selectionEnd
+		console.log(cursorPos)
 	})
 
 	hashInput.addEventListener("keypress", e => {
